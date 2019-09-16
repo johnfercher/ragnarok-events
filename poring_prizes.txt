@@ -1,0 +1,261 @@
+pvp_y_2-2	mapflag	noexp
+pvp_y_2-2	mapflag	nocommand	4
+pvp_y_2-2	mapflag	nowarpto
+pvp_y_2-2	mapflag	noteleport
+pvp_y_2-2	mapflag	noskill
+pvp_y_2-2	mapflag	monster_noteleport
+pvp_y_2-2	mapflag	nomemo
+pvp_y_2-2	mapflag	nosave
+pvp_y_2-2	mapflag	novending
+pvp_y_2-2	mapflag	nobranch
+pvp_y_2-2	mapflag	noicewall
+pvp_y_2-2	mapflag	loadevent
+pvp_y_2-2	mapflag	noitemconsumption
+pvp_y_2-2	mapflag	nodrop
+pvp_y_2-2	mapflag	noloot
+pvp_y_2-2	mapflag	nochat
+pvp_y_2-2	mapflag	nocostume
+pvp_y_2-2	mapflag	pvp	off
+
+new_zone04,91,23,5	script	Poring Premiado#entry	4_PORING,{
+	OnTouch:
+		if (getgmlevel() == 99) {
+			mes "^000000[ " + $npc_color$ + "Poring Premiado" + " ^000000]";
+			mes " ";
+			mes "^00688B========================";
+			mes "^00688B     ^FF0000OPÇÕES DO ADMINISTRADOR";
+			mes "^00688B========================";
+			mes " ";
+			mes "^00688BO que você deseja fazer?";
+			menu "^1F73FFPainel de Controle",painel_controle,"^80B523Menu do jogador",menu_jogador;
+			close;
+			
+			painel_controle:
+				next;
+				mes "^000000[ " + $npc_color$ + "Poring Premiado" + " ^000000]";
+				mes " ";
+				mes "^00688B========================";
+				mes "^00688B           ^FF0000PAINEL DE CONTROLE";
+				mes "^00688B========================";
+				mes " ";
+				mes "^00688BQual ação você deseja tomar?";
+				menu "^80B523Ligar o Evento",ligar_evento,"^D08C15Desligar o Evento",desligar_evento;
+				close;
+			
+				ligar_evento:
+					close2;
+					
+					if($survivor_status == -1){
+						donpcevent "Poring Premiado#Main::OnEventBegin";
+						dispbottom "[ Servidor ] : Você ligou o Evento: Poring Premiado.";
+						end;
+					}else{
+						dispbottom "[ Servidor ]: Não foi possível ligar o Evento: Poring Premiado, pois o mesmo já está ligado.";
+						end;
+					}
+				
+				desligar_evento:
+					close2;
+					
+					donpcevent "Poring Premiado#Main::OnEventEndStaff";
+					dispbottom "[ Servidor ] : Você desligou o Evento: Poring Premiado.";
+					end;
+					
+			menu_jogador: next;
+		}
+		
+		mes "^000000[ " + $npc_color$ + "Poring Premiado" + " ^000000]";
+		fn_salute_mes(strcharinfo(0), "happy1");
+		mes $option_color$ + "Como posso ajudar?";
+		next;
+		
+		switch(select($option_color$+"Entrar no evento:"+$option_color$+"Informações sobre:"+$warning_color$+"Cancelar")){
+			case 1:{
+				goto OnEntryMenu;
+			}break;
+			case 2:{
+				goto OnInfos;
+			}break;
+			case 3:{
+				mes "^000000[ " + $npc_color$ + "Poring Premiado" + " ^000000]";
+				fn_bye_mes(strcharinfo(0), "happy1");
+				close;
+			}break;
+		}	
+	end;
+	
+	OnOpenEvent:
+		questinfo 80498, QTYPE_EVENT,3;
+	end;
+	
+	OnCloseEvent:
+		questinfo 80498, QTYPE_EVENT,3,4051;
+	end;
+	
+	OnEntryMenu:
+		switch($poring_prizes_status){
+			case -1:{
+				goto OnEventOff;
+			}break;
+			case 0:{
+				goto OnEventTeleport;
+			}break;
+			case 1:{
+				goto OnEventOn;
+			}break;
+		}
+	end;
+	
+	OnEventOff:
+		mes "^000000[ " + $npc_color$ + "Poring Premiado" + " ^000000]";
+		mes $default_color$ + "O evento se encontra desativado.";
+		close;
+	end;
+	
+	OnEventTeleport:
+		mes "^000000[ " + $npc_color$ + "Poring Premiado" + " ^000000]";
+		mes $default_color$ + "Boa sorte.";
+		next;
+		
+		warp "pvp_y_2-2", 128, 146;
+	end;
+	
+	OnEventOn:
+		mes "^000000[ " + $npc_color$ + "Poring Premiado" + " ^000000]";
+		mes $default_color$ + "O evento já começou.";
+		mes $default_color$ + "Tente vir mais cedo da próxima vez.";
+		close;
+	end;
+	
+	OnInfos:
+		mes "^000000[ " + $npc_color$ + "Poring Premiado" + " ^000000]";
+		mes $default_color$ + "Esse é um evento é bem simples.";
+		next;
+		
+		mes "^000000[ " + $npc_color$ + "Poring Premiado" + " ^000000]";
+		mes $default_color$ + "Os jogadores são teleportados para para uma Izlude, onde são sumonados " + $warning_color$ + "Porings" + $default_color$ + ".";
+		next;
+		
+		mes "^000000[ " + $npc_color$ + "Poring Premiado" + " ^000000]";
+		mes $default_color$ + "Somente um poring é premiado.";
+		next;
+		
+		mes "^000000[ " + $npc_color$ + "Poring Premiado" + " ^000000]";
+		mes $warning_color$ + "Todas as habilidades são desativadas no mapa.";
+		close;
+	end;
+}
+
+pvp_y_2-2,129,157,2	script	Poring Premiado#Timer	-1,{
+	OnCheckEventOk:
+		set .@i, 0;
+		while($poring_prizes_status == 1){
+			sleep(15000);
+			if(.@i < $poring_prizes_minutes_to_end*4){
+				.@i++;
+			}else{
+				$poring_prizes_status = -1;
+			}
+		}
+		donpcevent "Poring Premiado#Main::OnEventEndTime";
+	end;
+}
+
+
+pvp_y_2-2,129,158,5	script	Poring Premiado#Main	-1,{
+	OnInit:
+		set $poring_prizes_status, -1;
+		set $poring_prizes_qtd, 301;
+		set $poring_prizes_minutes_to_end, 15;
+		set $poring_prizes_min, 2;
+		//goto OnEventBegin;
+	end;
+	
+	OnEventBegin:
+		// Liga emotion
+		donpcevent "Poring Premiado#entry::OnOpenEvent";
+		
+		// Mata dos os monstros
+		killmonsterall "pvp_y_2-2";
+		
+		// Teleporta quaisquer jogaadores presentes no mapa
+		mapwarp "pvp_y_2-2", "prontera", 149, 173;
+		
+		// Inicia a espera de jogadores
+		$poring_prizes_status = 0;
+		
+		// Anuncia a espera de jogadores
+		callfunc "fn_announcer","event_init", "Poring Premiado";
+		
+		if(getusers(8) >= $poring_prizes_min){
+			// Inicia o evento
+			$poring_prizes_status = 1;
+			
+			// Inicializa o timer de limite do evento
+			donpcevent "Poring Premiado#Timer::OnCheckEventOk";
+			
+			monster "" + "pvp_y_2-2" + "",0 , 0, "--ja--", 1002, 300, "";
+			monster "" + "pvp_y_2-2" + "",0 , 0, "--ja--", 1002, 1, "Poring Premiado#Main::OnEventEnd";
+		}else{
+			goto OnEventEndQtd;
+		}
+	end;
+	
+	OnEventEnd:
+		callfunc "fn_announcer","event_winner", strcharinfo(0), "Poring Premiado";
+		getitem 35015, 1;
+		
+		goto OnProcedureFinish;
+	end;
+	
+	OnEventEndStaff:
+		// Sinal para desligar o evento atual
+		$event_stop = true;
+		
+		// Avisa que o evento foi cancelado
+		callfunc "fn_announcer","event_staff_cancel", "Poring Premiado";
+		
+		goto OnProcedureFinish;
+	end;
+	
+	OnEventEndQtd:
+		// Cancelado por falta de jogadores
+		callfunc "fn_announcer","event_cancel", "Poring Premiado", $poring_prizes_min;
+		
+		goto OnProcedureFinish;
+	end;
+	
+	OnEventEndTime:
+		// Cancelado pelo tempo máximo
+		//callfunc "fn_announcer","event_timeup", "Poring Premiado", $poring_prizes_minutes_to_end;
+		
+		goto OnProcedureFinish;
+	end;
+	
+	OnProcedureFinish:
+		// Matar todos os monstros
+		killmonsterall "pvp_y_2-2";
+		
+		// Expulsar todos os jogadores
+		mapwarp "pvp_y_2-2", "prontera", 149, 173;
+		
+		// Fechar o evento
+		$poring_prizes_status = -1;
+		
+		// Reseta o contator de mobs
+		set $poring_prizes_qtd, 301;
+		
+		// Desliga emotion
+		donpcevent "Poring Premiado#entry::OnCloseEvent";
+	end;
+	
+	OnNPCKillEvent:
+		if(strcharinfo(3)=="pvp_y_2-2"){
+			$poring_prizes_qtd = $poring_prizes_qtd - 1;
+			
+			if($poring_prizes_qtd % 25 == 0){
+				mapannounce "pvp_y_2-2", "[ Servidor ]: Faltam " + $poring_prizes_qtd + " Porings.", bc_map, 0xFFFF00; 
+			}
+		}
+	end;
+}

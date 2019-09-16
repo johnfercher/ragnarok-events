@@ -1,0 +1,127 @@
+prontera,182,214,4	script	Empacotador	4_MYSTCASE,{
+	OnTouch:
+		set .@qtd, 100;
+		set .@item_give, 0;
+		set .@item_give2, 0;
+		set .@item_gain, 0;
+		
+		//if(getgroupid() > 0)	.@qtd = 100
+		
+		mes "^000000[ " + $npc_color$ + "Empacotador" + " ^000000]";
+		fn_salute_mes(strcharinfo(0), "happy1");
+		mes $option_color$ + "Gostaria de empacotar itens?";
+		next;
+		
+		switch(select($option_color$+"Garrafa de Veneno Mortal:"+$option_color$+"Bomba Ácida:"+$option_color$+"Poção Branca:"+$option_color$+"Poção Azul:"+$option_color$+"Água Benta:"+$warning_color$+"Cancelar")){
+			case 1:{
+				.@item_give = 678;
+				.@item_gain = 17067;
+			}break;
+			case 2:{
+				.@item_give = 7135;
+				.@item_give2 = 7136;
+				.@item_gain = 17069;
+			}break;
+			case 3:{
+				.@item_give = 504;
+				.@item_gain = 35009;
+			}break;
+			case 4:{
+				.@item_give = 505;
+				.@item_gain = 35010;
+			}break;
+			case 5:{
+				.@item_give = 523;
+				.@item_gain = 35011;
+			}break;
+			case 6:{
+				goto OnClose;
+			}break;
+		}
+		
+		if(.@item_give2 == 0){
+			set .@add_qtd,countitem(.@item_give)/.@qtd;
+			set .@rm_qtd,.@add_qtd*.@qtd;
+			
+			mes "^000000[ " + $npc_color$ + "Empacotador" + " ^000000]";
+			
+			if(.@add_qtd >= 1){
+				mes $default_color$ + "Oque está em " + $ok_color$ + "Verde" + $default_color$ + " será ganho e em " + $warning_color$ + "Vermelho" + $default_color$ + " perdido.^00CC00";
+				mes " ";
+				mes $ok_color$ + "+ " + .@add_qtd + "x " + getitemname(.@item_gain); 
+				mes $warning_color$ + "- " + .@rm_qtd + "x " + getitemname(.@item_give); 
+				next;
+				
+				switch(select($option_color$+"Empacotar:"+$warning_color$+"Cancelar")){
+					case 1:{
+						delitem .@item_give,.@rm_qtd;
+						getitem .@item_gain,.@add_qtd;
+						goto OnCloseOk;
+					}break;
+					case 2:{
+						goto OnClose;
+					}break;
+				}
+				close;
+			}else{
+				mes "Você deve possuir ao menos:";
+				mes $warning_color$ + "100x " + getitemname(.@item_give) + " " + $default_color$;
+				mes $default_color$ + "para fazer:";
+				mes $ok_color$ + "1x " + getitemname(.@item_gain) + $default_color$;
+				next;
+			}
+		}else{
+			set .@add_qtd,countitem(.@item_give)/.@qtd;
+			set .@add_qtd2,countitem(.@item_give2)/.@qtd;
+			set .@rm_qtd,.@add_qtd*.@qtd;
+			
+			mes "^000000[ " + $npc_color$ + "Empacotador" + " ^000000]";
+			
+			if(.@add_qtd >= 1){
+				mes $default_color$ + "Oque está em " + $ok_color$ + "Verde" + $default_color$ + " será ganho e em " + $warning_color$ + "Vermelho" + $default_color$ + " perdido.^00CC00";
+				mes " ";
+				mes $ok_color$ + "+ " + .@add_qtd + "x " + getitemname(.@item_gain); 
+				mes $warning_color$ + "- " + .@rm_qtd + "x " + getitemname(.@item_give); 
+				mes $warning_color$ + "- " + .@rm_qtd + "x " + getitemname(.@item_give2); 
+				next;
+				
+				switch(select($option_color$+"Empacotar:"+$warning_color$+"Cancelar")){
+					case 1:{
+						delitem .@item_give,.@rm_qtd;
+						delitem .@item_give2,.@rm_qtd;
+						getitem .@item_gain,.@add_qtd;
+						goto OnCloseOk;
+					}break;
+					case 2:{
+						goto OnClose;
+					}break;
+				}
+				close;
+			}else{
+				mes "Você deve possuir ao menos:";
+				mes $warning_color$ + "100x " + getitemname(.@item_give) + " " + $default_color$;
+				mes $warning_color$ + "100x " + getitemname(.@item_give2) + " " + $default_color$;
+				mes $default_color$ + "para fazer:";
+				mes $ok_color$ + "1x " + getitemname(.@item_gain) + $default_color$;
+				next;
+			}
+		}
+		
+		goto OnClose;
+		
+	end;
+	
+	OnClose:
+		mes "^000000[ " + $npc_color$ + "Empacotador" + " ^000000]";
+		fn_bye_mes(strcharinfo(0), "happy1");
+		close;
+	end;
+	
+	OnCloseOk:
+		mes "^000000[ " + $npc_color$ + "Empacotador" + " ^000000]";
+		mes $item_color$ + "Aqui está.";
+		fn_bye_mes(strcharinfo(0), "happy1");
+		close;
+	end;
+
+}

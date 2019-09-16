@@ -1,0 +1,1457 @@
+// Premios variados
+function	script	fn_get_gm_prize1	{
+	setarray .@prizes[0], 16683, 35003, 17104, 17105, 16260, 16265, 7828, 7829, 7773, 2357, 2524, 2421, 5171, 2374, 2537, 2375, 2433, 2729, 5808, 5123, 2678, 2679, 2554, 2576, 22014, 13414, 2589, 13017, 1228, 2000, 35012, 35013, 35014;
+	
+	set .@prize, rand(0, (getarraysize(.@prizes)-1));
+
+	return .@prizes[.@prize];
+}
+
+// anuncios do evento
+function	script	fn_get_gm_announce	{
+	set .@prize1, getarg(0);
+	set .@prize2, getarg(1);
+	
+	if($find_gm_status != 1) end;
+	announce "[GM]Hel: Pessoal, dentro de 5 minutos vamos iniciar o evento encontre o GM.", 0;
+	sleep(4000);
+	
+	if($find_gm_status != 1) end;
+	announce "[GM]Skadi: Quais vão ser os prêmios Hel?", 0;
+	sleep(4000);
+	
+	if($find_gm_status != 1) end;
+	announce "[GM]Hel: Os prêmios dessa vez são:", 0;
+	sleep(4000);
+	
+	if($find_gm_status != 1) end;
+	if(.@prize1 == 7828 || .@prize1 == 7829 || .@prize1 == 7773){
+		announce "[GM]Hel: 100x " + getitemname(.@prize1), 0;
+	}else{
+		if(.@prize1 == 13017)
+			announce "[GM]Hel: 1x " + getitemname(.@prize1) + " [1]", 0;
+		else
+			announce "[GM]Hel: 1x " + getitemname(.@prize1), 0;
+	}
+	sleep(4000);
+	
+	if($find_gm_status != 1) end;
+	announce "[GM]Hel: 1x " + getitemname(.@prize2), 0;
+	sleep(4000);
+	
+	if($find_gm_status != 1) end;
+	announce "[GM]Skadi: Basicamente, vou me esconder em um mapa.", 0;
+	sleep(4000);
+	
+	if($find_gm_status != 1) end;
+	announce "[GM]Hel: Enquanto o Skadi se esconde, vamos dando dicas de ele está.", 0;
+	sleep(4000);
+	
+	if($find_gm_status != 1) end;
+	announce "[GM]Hel: A primeira pessoa a encontrá-lo vence.", 0;
+	sleep(4000);
+	
+	if($find_gm_status != 1) end;
+	announce "[GM]Hel: Preparem-se...", 0;
+	sleep(60000);
+	
+	if($find_gm_status != 1) end;
+	for(set .@i, 4 ; .@i > 0 && $find_gm_status == 1 ; .@i--){
+		if(.@i > 1)
+			announce "[GM]Hel: O evento irá começar em " + .@i + " minutos.", 0;
+		else
+			announce "[GM]Hel: O evento irá começar em " + .@i + " minuto. Última chamada.", 0;
+		
+		sleep(60000);
+	}
+	return;
+}
+
+function	script	fn_give_gm_tip	{
+	set .@mes$, "";
+	
+	if(rand(0, 1) == 0){
+		.@mes$ = .@mes$ + "[GM]Skadi: Dica " + getarg(1) + ": ";
+	}else{
+		.@mes$ = .@mes$ + "[GM]Hel: Dica " + getarg(1) + ": ";
+	}
+	
+	// Local fechado
+	if(getarg(0) == "close"){
+		switch(rand(0,3)){
+			case 0:{
+				.@mes$ = .@mes$ + "O local é fechado.".
+			}break;
+			case 1:{
+				.@mes$ = .@mes$ + "Da para ver um teto.".
+			}break;
+			case 2:{
+				.@mes$ = .@mes$ + "Não consigo ver o céu desse mundão.".
+			}break;
+			case 3:{
+				.@mes$ = .@mes$ + "Aqui não chove.".
+			}break;
+		}
+	}
+	
+	// Local aberto
+	if(getarg(0) == "open"){
+		switch(rand(0,3)){
+			case 0:{
+				.@mes$ = .@mes$ + "O local é aberto.".
+			}break;
+			case 1:{
+				.@mes$ = .@mes$ + "Que brisa refrescante.".
+			}break;
+			case 2:{
+				.@mes$ = .@mes$ + "Consigo ver o céu desse mundão.".
+			}break;
+			case 3:{
+				.@mes$ = .@mes$ + "Aqui pode chover.".
+			}break;
+		}
+	}
+	
+	// Mapa grande
+	if(getarg(0) == "big_place"){
+		switch(rand(0,2)){
+			case 0:{
+				.@mes$ = .@mes$ + "Esse lugar é bem grande.".
+			}break;
+			case 1:{
+				.@mes$ = .@mes$ + "Que mapa grande.".
+			}break;
+			case 2:{
+				.@mes$ = .@mes$ + "Que local espaçoso.".
+			}break;
+		}
+	}
+	
+	// Mapa pegueno
+	if(getarg(0) == "small_place"){
+		switch(rand(0,2)){
+			case 0:{
+				.@mes$ = .@mes$ + "Esse lugar é pequeno.".
+			}break;
+			case 1:{
+				.@mes$ = .@mes$ + "Esse local é meio claustrofóbico.".
+			}break;
+			case 2:{
+				.@mes$ = .@mes$ + "Que local minúsculo.".
+			}break;
+		}
+	}
+	
+	// Cidade
+	if(getarg(0) == "city"){
+		switch(rand(0,2)){
+			case 0:{
+				.@mes$ = .@mes$ + "O mapa (é/está em) uma cidade.".
+			}break;
+			case 1:{
+				.@mes$ = .@mes$ + "Me sinto seguro nesse local.".
+			}break;
+			case 2:{
+				.@mes$ = .@mes$ + "Vi um guarda e uma funcionária Kafra.".
+			}break;
+		}
+	}
+	
+	// Campo
+	if(getarg(0) == "fild"){
+		switch(rand(0,2)){
+			case 0:{
+				.@mes$ = .@mes$ + "O mapa (é/está em) um campo.".
+			}break;
+			case 1:{
+				.@mes$ = .@mes$ + "Esse local não é muito seguro.".
+			}break;
+			case 2:{
+				.@mes$ = .@mes$ + "Vi alguns monstros por aqui.".
+			}break;
+		}
+	}
+	
+	// Calabouço
+	if(getarg(0) == "dungeon"){
+		switch(rand(0,2)){
+			case 0:{
+				.@mes$ = .@mes$ + "O mapa (é/está em) um calabouço.".
+			}break;
+			case 1:{
+				.@mes$ = .@mes$ + "Esse local não é nem um pouco seguro.".
+			}break;
+			case 2:{
+				.@mes$ = .@mes$ + "Vi vários monstros assustadores por aqui.".
+			}break;
+		}
+	}
+	
+	// WoE
+	if(getarg(0) == "woe"){
+		switch(rand(0,2)){
+			case 0:{
+				.@mes$ = .@mes$ + "É um local de batalhas.".
+			}break;
+			case 1:{
+				.@mes$ = .@mes$ + "Muito sangue de jogadores foi derramado por aqui.".
+			}break;
+			case 2:{
+				.@mes$ = .@mes$ + "Vejo vários castelos por aqui.".
+			}break;
+		}
+	}
+	
+	// Estudos
+	if(getarg(0) == "study"){
+		switch(rand(0,2)){
+			case 0:{
+				.@mes$ = .@mes$ + "Esse local guarda muito conhecimento.".
+			}break;
+			case 1:{
+				.@mes$ = .@mes$ + "Vejo alguns livros e cadeiras.".
+			}break;
+			case 2:{
+				.@mes$ = .@mes$ + "Muitos estudantes passam por aqui.".
+			}break;
+		}
+	}
+	
+	announce .@mes$, 0;
+	
+	return;
+}
+
+function	script	fn_has_winner	{
+	if($find_gm_status != -1){
+		$find_gm_status = -1;
+		announce "[GM]Skadi: O jogador " + getarg(0) + " venceu !", 0;
+		
+		if($find_gm_prize1 == 7828 || $find_gm_prize1 == 7829 || $find_gm_prize1 == 7773){
+			getitem $find_gm_prize1, 100;
+		}else{
+			getitem $find_gm_prize1, 1;
+		}
+		
+		getitem $find_gm_prize2, 1;
+		donpcevent "[GM]Hel#find::OnEventFinish";
+	}
+	return;
+}
+
+
+new_zone04,105,26,4	script	[GM]Hel#find	4_F_OPERATION,{
+	function fn_open_event {
+		questinfo 80498, QTYPE_EVENT,3;
+		return;
+	}
+	function fn_close_event {
+		questinfo 80498, QTYPE_EVENT,3,4051;
+		return;
+	}
+	OnTouch:
+		if(getgroupid() > 15){
+			mes "^000000[ " + $npc_color$ + "Encontre o GM" + " ^000000]";
+			mes " ";
+			mes "^00688B========================";
+			mes "^00688B     ^FF0000OPÇÕES DO ADMINISTRADOR";
+			mes "^00688B========================";
+			mes " ";
+			mes "^00688BO que você deseja fazer?";
+			menu "^1F73FFPainel de Controle",painel_controle,"^80B523Menu do jogador",menu_jogador;
+			close;
+			
+			painel_controle:
+				next;
+				mes "^000000[ " + $npc_color$ + "Encontre o GM" + " ^000000]";
+				mes " ";
+				mes "^00688B========================";
+				mes "^00688B           ^FF0000PAINEL DE CONTROLE";
+				mes "^00688B========================";
+				mes " ";
+				mes "^00688BQual ação você deseja tomar?";
+				menu "^80B523Ligar o Evento",ligar_evento,"^D08C15Desligar o Evento",desligar_evento;
+				close;
+			
+				ligar_evento:
+					close2;
+					
+					if($find_gm_status == -1){
+						dispbottom "[ Servidor ] : Você ligou o Evento: Encontre o GM.";
+						goto OnEventInit;
+						end;
+					}else{
+						dispbottom "[ Servidor ]: Não foi possível ligar o Evento: Encontre o GM, pois o mesmo já está ligado.";
+						end;
+					}
+				
+				desligar_evento:
+					close2;
+					
+					dispbottom "[ Servidor ] : Você desligou o Evento: Encontre o GM.";
+					goto OnEventEndStaff;
+					end;
+					
+			menu_jogador: close;
+		}
+	end;
+	
+	OnInit:
+		set $find_gm_status, -1;
+		set $find_gm_npc, 0;
+		set $find_gm_prize1, 0;
+		set $find_gm_prize2, 35016;
+		set $find_gm_sizeof_gms, 30;
+		
+		// Desabilita os NPCs
+		for(set .@i, 0 ; .@i < $find_gm_sizeof_gms ; .@i++){
+			set .@npc$, "[GM]Skadi#" + .@i;
+			disablenpc .@npc$;
+		}
+		
+		//goto OnEventInit;
+	end;
+	
+	OnEventInit:
+		fn_open_event();
+		$find_gm_prize1 = fn_get_gm_prize1();
+		$find_gm_prize2 = 35016;
+		
+		set $find_gm_status, 1;
+		fn_get_gm_announce($find_gm_prize1, $find_gm_prize2);
+		
+		set .@npc, rand(0, ($find_gm_sizeof_gms-1));
+		set .@npc$, "[GM]Skadi#" + .@npc;
+		
+		enablenpc .@npc$;
+		.@npc$ = .@npc$ + "::OnEvent";
+		donpcevent .@npc$;
+	end;
+	
+	OnEventFinish:
+		sleep(2000);
+		announce "[GM]Hel: O evento terminou pessoal, bom jogo :D", 0;
+		sleep(6000);
+		announce "[GM]Skadi: Até mais !", 0;
+		sleep(6000);
+		
+		for(set .@i, 0 ; .@i < $find_gm_sizeof_gms ; .@i++){
+			set .@npc$, "[GM]Skadi#" + .@i;
+			disablenpc .@npc$;
+		}
+		
+		fn_close_event();
+	end;
+	
+	OnEventFinishFail:
+		announce "[GM]Hel: Infelizmente não tivemos um vencedor.", 0;
+		sleep(6000);
+		announce "[GM]Skadi: Boa sorte da próxima vez.", 0;
+		sleep(6000);
+		
+		$find_gm_status = -1;
+		
+		for(set .@i, 0 ; .@i < $find_gm_sizeof_gms ; .@i++){
+			set .@npc$, "[GM]Skadi#" + .@i;
+			disablenpc .@npc$;
+		}
+		
+		fn_close_event();
+	end;
+	
+	OnEventEndStaff:
+		$find_gm_status = -1;
+		announce "[GM]Hel: O evento foi cancelado por um ADM", 0;
+		
+		for(set .@i, 0 ; .@i < $find_gm_sizeof_gms ; .@i++){
+			set .@npc$, "[GM]Skadi#" + .@i;
+			disablenpc .@npc$;
+		}
+		
+		fn_close_event();
+	end;
+}	
+
+prt_in,283,162,2	script	[GM]Skadi#0	4_M_OPERATION,{
+	OnTouch:
+		fn_has_winner(strcharinfo(0));
+	end;
+	
+	OnEvent:
+		if($find_gm_status != 1) end;
+		
+		for(set .@i, 0 ; .@i < 5 && $find_gm_status == 1 ; .@i++){
+			fn_give_gm_tip("close", 1);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			fn_give_gm_tip("small_place", 2);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			fn_give_gm_tip("city", 3);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Skadi: Dica 4: A cidade é Prontera.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Skadi: Dica 5: Vejo o estilista clássico.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Hel: Dica 6: A esquerda parte de baixo da cidade.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+		}
+		
+		donpcevent "[GM]Hel#find::OnEventFinishFail";
+	end;
+}
+
+prt_in,162,94,3	script	[GM]Skadi#1	4_M_OPERATION,{
+	OnTouch:
+		fn_has_winner(strcharinfo(0));
+	end;
+	
+	OnEvent:
+		if($find_gm_status != 1) end;
+		
+		for(set .@i, 0 ; .@i < 5 && $find_gm_status == 1 ; .@i++){
+			fn_give_gm_tip("close", 1);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			fn_give_gm_tip("small_place", 2);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			fn_give_gm_tip("city", 3);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			fn_give_gm_tip("study", 4);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Skadi: Dica 5: A cidade é Prontera.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Hel: Dica 6: No centro da cidade.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+		}
+		
+		donpcevent "[GM]Hel#find::OnEventFinishFail";
+	end;
+}
+
+prontera,259,147,3	script	[GM]Skadi#2	4_M_OPERATION,{
+	OnTouch:
+		fn_has_winner(strcharinfo(0));
+	end;
+	
+	OnEvent:
+		for(set .@i, 0 ; .@i < 5 && $find_gm_status == 1 ; .@i++){
+			fn_give_gm_tip("open", 1);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			fn_give_gm_tip("big_place", 2);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			fn_give_gm_tip("city", 3);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Skadi: Dica 4: A cidade é Prontera.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Hel: Dica 5: Vejo um vendedor de bonecos.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Hel: Dica 6: A direita na parte de baixo da cidade.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+		}
+		
+		donpcevent "[GM]Hel#find::OnEventFinishFail";
+	end;
+}
+
+prontera,66,343,3	script	[GM]Skadi#3	4_M_OPERATION,{
+	OnTouch:
+		fn_has_winner(strcharinfo(0));
+	end;
+	
+	OnEvent:
+		for(set .@i, 0 ; .@i < 5 && $find_gm_status == 1 ; .@i++){
+			fn_give_gm_tip("open", 1);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			fn_give_gm_tip("big_place", 2);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			fn_give_gm_tip("city", 3);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Skadi: Dica 4: A cidade é Prontera.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Hel: Dica 5: Vejo as muralhas da cidade.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Hel: Dica 6: Vejo um bando de cavaleiros.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+		}
+		
+		donpcevent "[GM]Hel#find::OnEventFinishFail";
+	end;
+}
+
+prt_castle,48,30,3	script	[GM]Skadi#4	4_M_OPERATION,{
+	OnTouch:
+		fn_has_winner(strcharinfo(0));
+	end;
+	
+	OnEvent:
+		for(set .@i, 0 ; .@i < 5 && $find_gm_status == 1 ; .@i++){
+			fn_give_gm_tip("close", 1);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			fn_give_gm_tip("big_place", 2);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			fn_give_gm_tip("city", 3);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Skadi: Dica 4: A cidade é Prontera.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Hel: Dica 5: O local é bem extravagante.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Hel: Dica 6: Vejo um cozinheiro.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+		}
+		
+		donpcevent "[GM]Hel#find::OnEventFinishFail";
+	end;
+}
+
+prt_castle,164,28,3	script	[GM]Skadi#5	4_M_OPERATION,{
+	OnTouch:
+		fn_has_winner(strcharinfo(0));
+	end;
+	
+	OnEvent:
+		for(set .@i, 0 ; .@i < 5 && $find_gm_status == 1 ; .@i++){
+			fn_give_gm_tip("close", 1);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			fn_give_gm_tip("big_place", 2);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			fn_give_gm_tip("city", 3);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Skadi: Dica 4: A cidade é Prontera.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Hel: Dica 5: O local é bem extravagante.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Hel: Dica 6: Vejo uma prisão.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+		}
+		
+		donpcevent "[GM]Hel#find::OnEventFinishFail";
+	end;
+}
+
+prt_castle,82,168,3	script	[GM]Skadi#6	4_M_OPERATION,{
+	OnTouch:
+		fn_has_winner(strcharinfo(0));
+	end;
+	
+	OnEvent:
+		for(set .@i, 0 ; .@i < 5 && $find_gm_status == 1 ; .@i++){
+			fn_give_gm_tip("close", 1);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			fn_give_gm_tip("big_place", 2);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			fn_give_gm_tip("city", 3);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Skadi: Dica 4: A cidade é Prontera.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Hel: Dica 5: O local é bem extravagante.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Hel: Dica 6: Vejo dois tronos.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+		}
+		
+		donpcevent "[GM]Hel#find::OnEventFinishFail";
+	end;
+}
+
+prt_fild01,313,105,3	script	[GM]Skadi#7	4_M_OPERATION,{
+	OnTouch:
+		fn_has_winner(strcharinfo(0));
+	end;
+	
+	OnEvent:
+		for(set .@i, 0 ; .@i < 5 && $find_gm_status == 1 ; .@i++){
+			fn_give_gm_tip("open", 1);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			fn_give_gm_tip("big_place", 2);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			fn_give_gm_tip("fild", 3);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Skadi: Dica 4: Estou próximo a cidade de Prontera.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Hel: Dica 5: Vejo Fabres, Lunáticos, Porings e Plantas.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Hel: Dica 6: Estamos um mapa para cima da WoE.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+		}
+		
+		donpcevent "[GM]Hel#find::OnEventFinishFail";
+	end;
+}
+
+prt_fild08,339,198,3	script	[GM]Skadi#8	4_M_OPERATION,{
+	OnTouch:
+		fn_has_winner(strcharinfo(0));
+	end;
+	
+	OnEvent:
+		for(set .@i, 0 ; .@i < 5 && $find_gm_status == 1 ; .@i++){
+			fn_give_gm_tip("open", 1);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			fn_give_gm_tip("big_place", 2);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			fn_give_gm_tip("fild", 3);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Skadi: Dica 4: Estou próximo a cidade de Prontera.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Hel: Dica 5: Vejo Fabres, Lunáticos, Porings e Plantas.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Hel: Dica 6: Estamos entre as cidades Prontera e Izlude.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+		}
+		
+		donpcevent "[GM]Hel#find::OnEventFinishFail";
+	end;
+}
+
+izlude,91,116,3	script	[GM]Skadi#9	4_M_OPERATION,{
+	OnTouch:
+		fn_has_winner(strcharinfo(0));
+	end;
+	
+	OnEvent:
+		for(set .@i, 0 ; .@i < 5 && $find_gm_status == 1 ; .@i++){
+			fn_give_gm_tip("open", 1);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			fn_give_gm_tip("small_place", 2);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			fn_give_gm_tip("city", 3);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Skadi: Dica 4: Vejo água e uma ponte.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Hel: Dica 5: A cidade é Izlude.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Hel: Dica 6: Vejo um gato que encanta equipamentos.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+		}
+		
+		donpcevent "[GM]Hel#find::OnEventFinishFail";
+	end;
+}
+
+izlude,48,162,3	script	[GM]Skadi#10	4_M_OPERATION,{
+	OnTouch:
+		fn_has_winner(strcharinfo(0));
+	end;
+	
+	OnEvent:
+		for(set .@i, 0 ; .@i < 5 && $find_gm_status == 1 ; .@i++){
+			fn_give_gm_tip("open", 1);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			fn_give_gm_tip("small_place", 2);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			fn_give_gm_tip("city", 3);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Skadi: Dica 4: Vejo água e uma ponte.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Hel: Dica 5: A cidade é Izlude.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Hel: Dica 6: Acho que vou contratar um mercenário.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+		}
+		
+		donpcevent "[GM]Hel#find::OnEventFinishFail";
+	end;
+}
+
+izlude,188,214,3	script	[GM]Skadi#11	4_M_OPERATION,{
+	OnTouch:
+		fn_has_winner(strcharinfo(0));
+	end;
+	
+	OnEvent:
+		for(set .@i, 0 ; .@i < 5 && $find_gm_status == 1 ; .@i++){
+			fn_give_gm_tip("open", 1);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			fn_give_gm_tip("small_place", 2);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			fn_give_gm_tip("city", 3);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Skadi: Dica 4: Vejo água e uma ponte.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Hel: Dica 5: A cidade é Izlude.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Hel: Dica 6: Acho que todo mundo já passou por aqui.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+		}
+		
+		donpcevent "[GM]Hel#find::OnEventFinishFail";
+	end;
+}
+
+iz_ac01,94,152,3	script	[GM]Skadi#12	4_M_OPERATION,{
+	OnTouch:
+		fn_has_winner(strcharinfo(0));
+	end;
+	
+	OnEvent:
+		for(set .@i, 0 ; .@i < 5 && $find_gm_status == 1 ; .@i++){
+			fn_give_gm_tip("close", 1);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			fn_give_gm_tip("big_place", 2);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			fn_give_gm_tip("city", 3);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			fn_give_gm_tip("study", 4);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Hel: Dica 5: A cidade é Izlude.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Hel: Dica 6: Estamos na parte de cima da cidade.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+		}
+		
+		donpcevent "[GM]Hel#find::OnEventFinishFail";
+	end;
+}
+
+geffen_in,159,123,3	script	[GM]Skadi#13	4_M_OPERATION,{
+	OnTouch:
+		fn_has_winner(strcharinfo(0));
+	end;
+	
+	OnEvent:
+		for(set .@i, 0 ; .@i < 5 && $find_gm_status == 1 ; .@i++){
+			fn_give_gm_tip("close", 1);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			fn_give_gm_tip("small_place", 2);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			fn_give_gm_tip("city", 3);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			fn_give_gm_tip("study", 4);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Hel: Dica 5: A cidade é Geffen.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Hel: Dica 6: Vejo muitos magos.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+		}
+		
+		donpcevent "[GM]Hel#find::OnEventFinishFail";
+	end;
+}
+
+gef_tower,107,31,3	script	[GM]Skadi#14	4_M_OPERATION,{
+	OnTouch:
+		fn_has_winner(strcharinfo(0));
+	end;
+	
+	OnEvent:
+		for(set .@i, 0 ; .@i < 5 && $find_gm_status == 1 ; .@i++){
+			fn_give_gm_tip("close", 1);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			fn_give_gm_tip("big_place", 2);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			fn_give_gm_tip("city", 3);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Hel: Dica 4: Estamos em uma torre no centro da cidade.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Hel: Dica 5: A cidade é Geffen.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Hel: Dica 6: Estamos no último andar.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+		}
+		
+		donpcevent "[GM]Hel#find::OnEventFinishFail";
+	end;
+}
+
+gef_tower,57,162,3	script	[GM]Skadi#15	4_M_OPERATION,{
+	OnTouch:
+		fn_has_winner(strcharinfo(0));
+	end;
+	
+	OnEvent:
+		for(set .@i, 0 ; .@i < 5 && $find_gm_status == 1 ; .@i++){
+			fn_give_gm_tip("close", 1);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			fn_give_gm_tip("big_place", 2);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			fn_give_gm_tip("city", 3);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Hel: Dica 4: Estamos em uma torre no centro da cidade.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Hel: Dica 5: A cidade é Geffen.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Hel: Dica 6: Estamos no hall.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+		}
+		
+		donpcevent "[GM]Hel#find::OnEventFinishFail";
+	end;
+}
+
+geffen,87,32,3	script	[GM]Skadi#16	4_M_OPERATION,{
+	OnTouch:
+		fn_has_winner(strcharinfo(0));
+	end;
+	
+	OnEvent:
+		for(set .@i, 0 ; .@i < 5 && $find_gm_status == 1 ; .@i++){
+			fn_give_gm_tip("open", 1);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			fn_give_gm_tip("big_place", 2);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			fn_give_gm_tip("city", 3);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Hel: Dica 4: Estamos bem de baixo do nariz de vocês.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Hel: Dica 5: A cidade é Geffen.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Hel: Dica 6: Estamos na parte de baixo da cidade, consigo ver o local de lutas.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+		}
+		
+		donpcevent "[GM]Hel#find::OnEventFinishFail";
+	end;
+}
+
+geffen,206,158,3	script	[GM]Skadi#17	4_M_OPERATION,{
+	OnTouch:
+		fn_has_winner(strcharinfo(0));
+	end;
+	
+	OnEvent:
+		for(set .@i, 0 ; .@i < 5 && $find_gm_status == 1 ; .@i++){
+			fn_give_gm_tip("open", 1);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			fn_give_gm_tip("big_place", 2);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			fn_give_gm_tip("city", 3);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Hel: Dica 4: Vejo uma feira.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Hel: Dica 5: A cidade é Geffen.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Hel: Dica 6: Estamos na parte esquerda da cidade.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+		}
+		
+		donpcevent "[GM]Hel#find::OnEventFinishFail";
+	end;
+}
+
+gef_fild04,169,161,3	script	[GM]Skadi#18	4_M_OPERATION,{
+	OnTouch:
+		fn_has_winner(strcharinfo(0));
+	end;
+	
+	OnEvent:
+		for(set .@i, 0 ; .@i < 5 && $find_gm_status == 1 ; .@i++){
+			fn_give_gm_tip("open", 1);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			fn_give_gm_tip("big_place", 2);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			fn_give_gm_tip("fild", 3);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Hel: Dica 4: Vejo Fabres, Mandrágoras, Lunáticos e Chonchons.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Hel: Dica 5: A cidade é Geffen.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Hel: Dica 6: Estamos a cima da cidade.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+		}
+		
+		donpcevent "[GM]Hel#find::OnEventFinishFail";
+	end;
+}
+
+gef_fild00,212,112,3	script	[GM]Skadi#19	4_M_OPERATION,{
+	OnTouch:
+		fn_has_winner(strcharinfo(0));
+	end;
+	
+	OnEvent:
+		for(set .@i, 0 ; .@i < 5 && $find_gm_status == 1 ; .@i++){
+			fn_give_gm_tip("open", 1);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			fn_give_gm_tip("big_place", 2);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			fn_give_gm_tip("fild", 3);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Hel: Dica 4: Vejo Fabres, Porings e Chonchons.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Hel: Dica 5: A cidade é Geffen.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Hel: Dica 6: Estamos a direita da cidade.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+		}
+		
+		donpcevent "[GM]Hel#find::OnEventFinishFail";
+	end;
+}
+
+payon,196,305,3	script	[GM]Skadi#20	4_M_OPERATION,{
+	OnTouch:
+		fn_has_winner(strcharinfo(0));
+	end;
+	
+	OnEvent:
+		for(set .@i, 0 ; .@i < 5 && $find_gm_status == 1 ; .@i++){
+			fn_give_gm_tip("open", 1);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			fn_give_gm_tip("big_place", 2);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			fn_give_gm_tip("city", 3);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Hel: Dica 4: Vejo árvores.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Hel: Dica 5: A cidade é Payon.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Hel: Dica 6: Estamos no topo de uma montanha.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+		}
+		
+		donpcevent "[GM]Hel#find::OnEventFinishFail";
+	end;
+}
+
+payon_in01,62,9,3	script	[GM]Skadi#21	4_M_OPERATION,{
+	OnTouch:
+		fn_has_winner(strcharinfo(0));
+	end;
+	
+	OnEvent:
+		for(set .@i, 0 ; .@i < 5 && $find_gm_status == 1 ; .@i++){
+			fn_give_gm_tip("close", 1);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			fn_give_gm_tip("small_place", 2);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			fn_give_gm_tip("city", 3);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Hel: Dica 4: Vejo artefatos orientais.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Hel: Dica 5: A cidade é Payon.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Hel: Dica 6: Acho que vou fazer um elmo de anjo.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+		}
+		
+		donpcevent "[GM]Hel#find::OnEventFinishFail";
+	end;
+}
+
+payon,275,248,3	script	[GM]Skadi#22	4_M_OPERATION,{
+	OnTouch:
+		fn_has_winner(strcharinfo(0));
+	end;
+	
+	OnEvent:
+		for(set .@i, 0 ; .@i < 5 && $find_gm_status == 1 ; .@i++){
+			fn_give_gm_tip("open", 1);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			fn_give_gm_tip("big_place", 2);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			fn_give_gm_tip("city", 3);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Hel: Dica 4: Vejo uma plantação.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Hel: Dica 5: A cidade é Payon.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Hel: Dica 6: Estamos no canto esquerdo.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+		}
+		
+		donpcevent "[GM]Hel#find::OnEventFinishFail";
+	end;
+}
+
+payon_in03,16,28,3	script	[GM]Skadi#23	4_M_OPERATION,{
+	OnTouch:
+		fn_has_winner(strcharinfo(0));
+	end;
+	
+	OnEvent:
+		for(set .@i, 0 ; .@i < 5 && $find_gm_status == 1 ; .@i++){
+			fn_give_gm_tip("close", 1);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			fn_give_gm_tip("big_place", 2);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			fn_give_gm_tip("city", 3);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Hel: Dica 4: Vejo artefatos orientais.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Hel: Dica 5: A cidade é Payon.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Hel: Dica 6: Vejo monstros e um cara mal encarado.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+		}
+		
+		donpcevent "[GM]Hel#find::OnEventFinishFail";
+	end;
+}
+
+pay_arche,63,148,3	script	[GM]Skadi#24	4_M_OPERATION,{
+	OnTouch:
+		fn_has_winner(strcharinfo(0));
+	end;
+	
+	OnEvent:
+		for(set .@i, 0 ; .@i < 5 && $find_gm_status == 1 ; .@i++){
+			fn_give_gm_tip("open", 1);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			fn_give_gm_tip("big_place", 2);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			fn_give_gm_tip("city", 3);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Hel: Dica 4: Vejo uma caverna.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Hel: Dica 5: A cidade é Payon.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Hel: Dica 6: Estamos na parte de cima da cidade.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+		}
+		
+		donpcevent "[GM]Hel#find::OnEventFinishFail";
+	end;
+}
+
+payon_in03,97,164,3	script	[GM]Skadi#25	4_M_OPERATION,{
+	OnTouch:
+		fn_has_winner(strcharinfo(0));
+	end;
+	
+	OnEvent:
+		for(set .@i, 0 ; .@i < 5 && $find_gm_status == 1 ; .@i++){
+			fn_give_gm_tip("close", 1);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			fn_give_gm_tip("small_place", 2);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			fn_give_gm_tip("city", 3);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Hel: Dica 4: Vejo artefatos orientais.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Hel: Dica 5: A cidade é Payon.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Hel: Dica 6: Vejo uma espécie de Rei.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+		}
+		
+		donpcevent "[GM]Hel#find::OnEventFinishFail";
+	end;
+}
+
+pay_gld,199,149,3	script	[GM]Skadi#26	4_M_OPERATION,{
+	OnTouch:
+		fn_has_winner(strcharinfo(0));
+	end;
+	
+	OnEvent:
+		for(set .@i, 0 ; .@i < 5 && $find_gm_status == 1 ; .@i++){
+			fn_give_gm_tip("open", 1);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			fn_give_gm_tip("big_place", 2);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			fn_give_gm_tip("woe", 3);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Hel: Dica 4: Vejo árvores.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Hel: Dica 5: A cidade é Payon.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Hel: Dica 6: Vejo pontes e rios.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+		}
+		
+		donpcevent "[GM]Hel#find::OnEventFinishFail";
+	end;
+}
+
+prt_gld,155,117,3	script	[GM]Skadi#27	4_M_OPERATION,{
+	OnTouch:
+		fn_has_winner(strcharinfo(0));
+	end;
+	
+	OnEvent:
+		for(set .@i, 0 ; .@i < 5 && $find_gm_status == 1 ; .@i++){
+			fn_give_gm_tip("open", 1);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			fn_give_gm_tip("big_place", 2);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			fn_give_gm_tip("woe", 3);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Hel: Dica 4: Vejo bancos.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Hel: Dica 5: A cidade é Prontera.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Hel: Dica 6: Vejo uma praça.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+		}
+		
+		donpcevent "[GM]Hel#find::OnEventFinishFail";
+	end;
+}
+
+alberta,145,85,3	script	[GM]Skadi#28	4_M_OPERATION,{
+	OnTouch:
+		fn_has_winner(strcharinfo(0));
+	end;
+	
+	OnEvent:
+		for(set .@i, 0 ; .@i < 5 && $find_gm_status == 1 ; .@i++){
+			fn_give_gm_tip("open", 1);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			fn_give_gm_tip("big_place", 2);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			fn_give_gm_tip("city", 3);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Skadi: Dica 4: A cidade é Alberta.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Hel: Dica 5: Estamos em cima de uma casa.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Hel: Dica 6: Acho que vou fazer uma Coroa do Deus-Sol.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+		}
+		
+		donpcevent "[GM]Hel#find::OnEventFinishFail";
+	end;
+}
+
+alberta_in,163,88,3	script	[GM]Skadi#29	4_M_OPERATION,{
+	OnTouch:
+		fn_has_winner(strcharinfo(0));
+	end;
+	
+	OnEvent:
+		for(set .@i, 0 ; .@i < 5 && $find_gm_status == 1 ; .@i++){
+			fn_give_gm_tip("close", 1);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			fn_give_gm_tip("small_place", 2);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			fn_give_gm_tip("city", 3);
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Skadi: Dica 4: A cidade é Alberta.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Hel: Dica 5: Vejo muitos comerciantes.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+			
+			announce "[GM]Hel: Dica 6: Estamos praticamente no centro da cidade.", 0;
+			sleep(45000);
+			if($find_gm_status != 1) end;
+		}
+		
+		donpcevent "[GM]Hel#find::OnEventFinishFail";
+	end;
+}

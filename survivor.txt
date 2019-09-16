@@ -1,0 +1,333 @@
+/*
+	$<evento>_status = -1, 0, 1;
+	-1 = desativado
+	0 = esperando a entrada de jogadores
+	1 = rolando
+*/
+
+// Flags do mapa
+alde_tt02	mapflag	noexp
+alde_tt02	mapflag	nocommand	4
+alde_tt02	mapflag	nowarpto
+alde_tt02	mapflag	noteleport
+alde_tt02	mapflag	monster_noteleport
+alde_tt02	mapflag	nomemo
+alde_tt02	mapflag	nosave
+alde_tt02	mapflag	novending
+alde_tt02	mapflag	nobranch
+alde_tt02	mapflag	noicewall
+alde_tt02	mapflag	loadevent
+alde_tt02	mapflag	noitemconsumption
+alde_tt02	mapflag	nodrop
+alde_tt02	mapflag	noloot
+alde_tt02	mapflag	nochat
+alde_tt02	mapflag	nocostume
+
+
+// Entrada para o mapa 
+new_zone04,94,26,4	script	Sobrevivente#entry	4_JP_MEDUSA_H,{
+	function fn_entry_ok;
+	
+	OnTouch:
+		if (getgmlevel() == 99) {
+			mes "^000000[ " + $npc_color$ + "Sobrevivente" + " ^000000]";
+			mes " ";
+			mes "^00688B========================";
+			mes "^00688B     ^FF0000OPÇÕES DO ADMINISTRADOR";
+			mes "^00688B========================";
+			mes " ";
+			mes "^00688BO que você deseja fazer?";
+			menu "^1F73FFPainel de Controle",painel_controle,"^80B523Menu do jogador",menu_jogador;
+			close;
+			
+			painel_controle:
+				next;
+				mes "^000000[ " + $npc_color$ + "Sobrevivente" + " ^000000]";
+				mes " ";
+				mes "^00688B========================";
+				mes "^00688B           ^FF0000PAINEL DE CONTROLE";
+				mes "^00688B========================";
+				mes " ";
+				mes "^00688BQual ação você deseja tomar?";
+				menu "^80B523Ligar o Evento",ligar_evento,"^D08C15Desligar o Evento",desligar_evento;
+				close;
+			
+				ligar_evento:
+					close2;
+					
+					if($survivor_status == -1){
+						donpcevent "SobreviventeMain::OnEventBegin";
+						dispbottom "[ Servidor ] : Você ligou o Evento: Sobrevivente.";
+						end;
+					}else{
+						dispbottom "[ Servidor ]: Não foi possível ligar o Evento: Sobrevivente, pois o mesmo já está ligado.";
+						end;
+					}
+				
+				desligar_evento:
+					close2;
+					
+					donpcevent "SobreviventeMain::OnEventEndStaff";
+					dispbottom "[ Servidor ] : Você desligou o Evento: Sobrevivente.";
+					end;
+					
+			menu_jogador: next;
+		}
+		
+		mes "^000000[ " + $npc_color$ + "Sobrevivente" + " ^000000]";
+		fn_salute_mes(strcharinfo(0), "happy1");
+		mes $option_color$ + "Como posso ajudar?";
+		next;
+		
+		switch(select($option_color$+"Entrar no evento:"+$option_color$+"Informações sobre:"+$warning_color$+"Cancelar")){
+			case 1:{
+				goto OnEntryMenu;
+			}break;
+			case 2:{
+				goto OnInfos;
+			}break;
+			case 3:{
+				mes "^000000[ " + $npc_color$ + "Sobrevivente" + " ^000000]";
+				fn_bye_mes(strcharinfo(0), "happy1");
+				close;
+			}break;
+		}	
+	end;
+	
+	OnOpenEvent:
+		questinfo 80498, QTYPE_EVENT,3;
+	end;
+	
+	OnCloseEvent:
+		questinfo 80498, QTYPE_EVENT,3,4051;
+	end;
+	
+	OnEntryMenu:
+		switch($survivor_status){
+			case -1:{
+				goto OnEventOff;
+			}break;
+			case 0:{
+				if(fn_entry_ok()){
+					goto OnEventTeleport;
+				}else{
+					goto OnError;
+				}
+			}break;
+			case 1:{
+				goto OnEventOn;
+			}break;
+		}
+	end;
+	
+	OnEventOff:
+		mes "^000000[ " + $npc_color$ + "Sobrevivente" + " ^000000]";
+		mes $default_color$ + "O evento se encontra desativado.";
+		close;
+	end;
+	
+	OnEventTeleport:
+		mes "^000000[ " + $npc_color$ + "Sobrevivente" + " ^000000]";
+		mes $default_color$ + "Boa sorte.";
+		next;
+		
+		warp "alde_tt02", 17, 189;
+	end;
+	
+	OnEventOn:
+		mes "^000000[ " + $npc_color$ + "Sobrevivente" + " ^000000]";
+		mes $default_color$ + "O evento já começou.";
+		mes $default_color$ + "Tente vir mais cedo da próxima vez.";
+		close;
+	end;
+	
+	OnError:
+		mes "^000000[ " + $npc_color$ + "Sobrevivente" + " ^000000]";
+		mes $default_color$ + "Você precisa ser um" + $warning_color$ + " Aprendiz 1/1 " + $default_color$ + "para participar desse evento.";
+		close;
+	end;
+	
+	OnInfos:
+		mes "^000000[ " + $npc_color$ + "Sobrevivente" + " ^000000]";
+		mes $default_color$ + "Nesse evento só entram" + $item_color$ + " Aprendizes 1/1" + $default_color$ + ".";
+		next;
+		
+		mes "^000000[ " + $npc_color$ + "Sobrevivente" + " ^000000]";
+		mes $default_color$ + "Os jogadores são teleportados para um mapa de labirinto, onde são sumonados " + $warning_color$ + "Zumbis" + $default_color$ + " a cada " + $warning_color$ + "30 segundos" + $default_color$ + ".";
+		next;
+		
+		mes "^000000[ " + $npc_color$ + "Sobrevivente" + " ^000000]";
+		mes $default_color$ + "O último jogador a ficar vivo vence.";
+		close;
+	end;
+	
+	function fn_entry_ok{
+		set .@ok, false;
+		
+		if(JobLevel == 1 && BaseLevel == 1 && Class == 0){
+			.@ok = true;
+		}
+		
+		return .@ok;
+	}
+}
+
+// Saída do evento
+alde_tt02,297,168,4	script	Sobrevivente#exit	4_JP_MEDUSA_H,10,10,{
+	OnInit:
+		set .touched, false;
+	end;
+	
+	OnTouch:
+		if(.touched == false){
+			.touched = true;
+			callfunc "fn_announcer","event_winner", strcharinfo(0), "Sobrevivente";
+			
+			npctalk "Parabéns, você venceu o evento e é um verdadeiro sobrevivente.";
+			sleep2(4000);
+			
+			npctalk "Aqui está seu prêmio.";
+			getitem 35015, 1;
+			sleep2(4000);
+			
+			npctalk "Até mais.";
+			sleep2(4000);
+			
+			warp "prontera", 149, 173;
+			sleep2(1000);
+			.touched = false;
+		}
+	end;
+}
+
+// O evento em sí
+alde_tt02,21,188,4	script	SobreviventeMain	-1,{
+	OnEventBegin:
+		// Liga emotion
+		donpcevent "Sobrevivente#entry::OnOpenEvent";
+		
+		// Mata todos os monstros
+		killmonsterall "alde_tt02";
+		
+		// Teleporta quaisquer jogaadores presentes no mapa
+		mapwarp "alde_tt02", "prontera", 149, 173;
+		
+		// Inicia a espera de jogadores
+		$survivor_status = 0;
+		
+		// DEBUG
+		//set $event_time_announce, 1;
+		
+		// Anunca a espera de jogadores
+		callfunc "fn_announcer","event_init", "Sobrevivente";
+		
+		// Inicia o evento se um membro da staff não tiver cancelado
+		if($survivor_status != -1){
+			if(getusers(8) >= .survivor_min_of_players){
+				goto OnEventStart;
+			}else{
+				goto OnEventEndQtd;
+			}
+		}
+	end;
+	
+	OnEventEndQtd:
+		// Mata todos os monstros
+		killmonsterall "alde_tt02";
+		
+		// Teleporta quaisquer jogadores presentes no mapa
+		mapwarp "alde_tt02", "prontera", 149, 173;
+		
+		// Cancela o evento
+		$survivor_status = -1;
+		callfunc "fn_announcer","event_cancel", "Sobrevivente", .survivor_min_of_players;
+		
+		// Desliga emotion
+		donpcevent "Sobrevivente#entry::OnCloseEvent";
+	end;
+	
+	OnEventStart:
+		// Inicia o evento
+		$survivor_status = 1;
+		callfunc "fn_announcer","event_start", "Sobrevivente";
+		
+		// Inicia o verificador em tempo
+		donpcevent "SobreviventeTimer::OnCheckEventOk";
+		
+		monster "alde_tt02",23,189,"Zumbi",2604,1;	// Zumbi Vermelho
+		
+		for(set .@i, 0 ; .@i < .survivor_max_rounds && $survivor_status == 1 ; .@i++){
+			mapannounce "alde_tt02", "[ Servidor ]: A leva n° " + (.@i+1) + " de Zumbis foi sumonada.", bc_map, 0xFFFF00; 
+			areamonster "alde_tt02",10,184,109,277,"Zumbi",2604,20;	// Zumbi Vermelho
+			sleep(30000);
+		}
+	end;
+	
+	OnEventEnd:
+		// Mata todos os monstros
+		killmonsterall "alde_tt02";
+		
+		// Teleporta os vencedores
+		mapwarp "alde_tt02", "alde_tt02", 297, 161;
+		
+		// Finaliza o evento
+		$survivor_status = -1;
+		
+		// Desliga emotion
+		donpcevent "Sobrevivente#entry::OnCloseEvent";
+	end;
+	
+	OnEventEndStaff:
+		// Mata todos os monstros
+		killmonsterall "alde_tt02";
+		
+		// Teleporta quaisquer jogadores presentes no mapa
+		mapwarp "alde_tt02", "prontera", 149, 173;
+		
+		// Sinal para desligar o evento atual
+		$event_stop = true;
+		
+		// Finaliza o evento
+		$survivor_status = -1;
+		
+		// Avisa que foi cancelado
+		callfunc "fn_announcer","event_staff_cancel", "Sobrevivente";
+		
+		// Desliga emotion
+		donpcevent "Sobrevivente#entry::OnCloseEvent";
+	end;
+	
+	OnPCDieEvent:
+		if(strcharinfo(3)=="alde_tt02"){
+			// Caso não seja o útilmo jogador vivo
+			if(getusers(8) != 1){
+				warp "prontera", 149, 173;
+				sleep2(1000);
+				if(getusers(8) <= 1){	
+					goto OnEventEnd;
+				}
+			}else{
+				goto OnEventEnd;
+			}
+		}
+	end;
+	
+	OnInit:
+		set $survivor_status, -1;
+		set .survivor_min_of_players, 2;
+		set .survivor_max_rounds, 20;
+	end;
+}
+
+alde_tt02,21,188,4	script	SobreviventeTimer	-1,{
+	// Checa a cada 5 segundos se existem players na DS
+	OnCheckEventOk:
+		while($survivor_status == 1){
+			if(getusers(8) <= 1){	// Caso não, encerra a DS
+				donpcevent "SobreviventeMain::OnEventEnd";
+			}
+			sleep(5000);
+		}
+	end;
+}
+

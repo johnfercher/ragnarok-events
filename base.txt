@@ -1,0 +1,46 @@
+new_zone04,99,10,0	warp	eventos2	1,2,prontera,149,173
+
+prontera,147,173,6	script	Sala de Eventos#entry	4_M_OLIVER,{
+	OnTouch:
+		mes "^000000[ " + $npc_color$ + "Sala de Eventos" + " ^000000]";
+		set .@cutin$, "bu_oliver1.bmp";
+		cutin .@cutin$,2;
+		fn_salute_mes(strcharinfo(0), "young1");
+		next;
+		
+		mes "^000000[ " + $npc_color$ + "Sala de Eventos" + " ^000000]";
+		cutin "",255;
+		fn_bye_mes(strcharinfo(0), "young1");
+		
+		warp "new_zone04", 99, 15;
+		close;	
+	end;
+	
+	OnInit:
+		questinfo 80498, QTYPE_EVENT,3;
+	end;
+}
+
+new_zone04,99,29,4	script	Sala de Eventos#info	4_M_OLIVER,{
+	OnTouch:
+		mes "^000000[ " + $npc_color$ + "Sala de Eventos" + " ^000000]";
+		set .@cutin$, "bu_oliver1.bmp";
+		cutin .@cutin$,2;
+		mes $default_color$ + "Essa é a sala de eventos.";
+		next;
+		
+		mes "^000000[ " + $npc_color$ + "Sala de Eventos" + " ^000000]";
+		mes $default_color$ + "Todas as entradas para eventos automáticos se encontram aqui.";
+		next;
+		
+		mes "^000000[ " + $npc_color$ + "Sala de Eventos" + " ^000000]";
+		mes $default_color$ + "Os eventos da staff que necessitem teleportar os jogadores para um determinado mapa, também possuem entrada por aqui.";
+		next;
+		
+		mes "^000000[ " + $npc_color$ + "Sala de Eventos" + " ^000000]";
+		cutin "",255;
+		mes $default_color$ + "Divirta-se e boa sorte.";
+		close;	
+	end;
+}
+	
